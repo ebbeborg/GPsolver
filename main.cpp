@@ -1,0 +1,8 @@
+#include "gpsolver.h"
+
+int main()
+
+{
+
+    return 0;
+}
