@@ -6,7 +6,7 @@
 #ifndef GPSOLVER_H
 #define GPSOLVER_H
 
-class gpsolver{
+class gpsolver {
         public:
             //spatially discretises RHS of coupled GP eqn  in 1D using FDM
             void spatialDiscretiser(int, int);

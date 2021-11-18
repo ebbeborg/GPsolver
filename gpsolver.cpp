@@ -4,11 +4,11 @@
 
 using namespace std;
 
-void gpsolver::spatialDiscretiser(){
+void gpsolver::spatialDiscretiser(int parameter1, int parameter2){
 
 }
 
-void gpsolver::temporalDiscretiser(){
+void gpsolver::temporalDiscretiser(int parameter1, int parameter2){
 
 }
 
