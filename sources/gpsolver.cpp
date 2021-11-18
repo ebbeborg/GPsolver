@@ -1,9 +1,18 @@
-//Solves the 2-component coupled GP eqns by discretising it using FDM and Runge 
+//Source code for the FDM and Runge functions which discretise the 2-component coupled GP eqns 
 
 #include "gpsolver.h"
-#include <iostream>;
 
 using namespace std;
+
+void gpsolver::spatialDiscretiser(){
+
+}
+
+void gpsolver::temporalDiscretiser(){
+
+}
+
+
 
 
 
