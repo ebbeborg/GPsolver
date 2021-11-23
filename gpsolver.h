@@ -8,11 +8,14 @@
 
 class gpsolver {
         public:
+            //Finds constant for spatially discretised wavefunction at each grid point G
+            float discretisedConstant(float, float, float, float);
+            
             //spatially discretises RHS of coupled GP eqn  in 1D using FDM
-            void spatialDiscretiser(int, int);
+            void spatialDiscretiser(int, float, float, float, float, float, float);
 
             //solves eigenproblem (resulting from discretisation) using Runge-Kutter method
-            void temporalDiscretiser(int, int);
+            void temporalDiscretiser(float);
 
         private:
 };
