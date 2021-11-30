@@ -15,16 +15,6 @@ int main()
     double coherentCoupling;
     gpsolver homoGP;
 
-    //input BEC condensate parameters
-    std::cout<<"Input initial density of condensate n_0:"; 
-    std::cin>>n_0;
-    std::cout<<"Input intraspecies (a on a, b on b) contact constant g:"; 
-    std::cin>>g;
-    std::cout<<"Input interspecies (a on b, b on a) contact constant g_ab:"; 
-    std::cin>>g_ab;
-    std::cout<<"Input coherent coupling:"; 
-    std::cin>>coherentCoupling;
-    
     //input discretisation parameters
     std::cout<<"Input gridsize:"; 
     std::cin>>N;
@@ -34,11 +24,21 @@ int main()
     //defining a matrix variable type
     matrix M;
 
+    //input BEC parameters
+    std::cout<<"Input initial density of condensate n_0:"; 
+    std::cin>>n_0;
+    std::cout<<"Input intraspecies (a on a, b on b) contact interaction g:"; 
+    std::cin>>g;
+    std::cout<<"Input interspecies (a on b, b on a) contact interaction g_ab:"; 
+    std::cin>>g_ab;
+    std::cout<<"Input coherent coupling:"; 
+    std::cin>>coherentCoupling;
+
     //dimensionalising constant G
     G_a=homoGP.discretisedConstant(g, g_ab, n_0, dx);
     G_b=homoGP.discretisedConstant(g, g_ab, n_0, dx);
 
-    homoGP.spatialDiscretiser(N, M, g, n_0, G_a, G_b, coherentCoupling);
+    homoGP.spatialDiscretiser(N, M, G_a, G_b, g, n_0, coherentCoupling);
     homoGP.temporalDiscretiser(M);
 
     return 0;
