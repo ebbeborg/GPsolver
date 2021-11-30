@@ -7,7 +7,11 @@
 
 using namespace std;
 
-void gpsolver::spatialDiscretiser(int N, float &M[], float g, float n_0, float G_a, float G_b, float omega){
+double gpsolver::discretisedConstant(double g, double g_ab, double n_0, double dx){
+
+}
+
+void gpsolver::spatialDiscretiser(int N, matrix & M, double g, double n_0, double G_a, double G_b, double omega){
     
     //check if gridsize is even
     if (N%2!=0){
@@ -27,11 +31,11 @@ void gpsolver::spatialDiscretiser(int N, float &M[], float g, float n_0, float G
         if (i%2==0){ //for GPa
             M[i][i-2]=-1;
             M[i][i]=G_a;
-            M[i][i+1]=1;//omega/gn_0;
+            M[i][i+1]=omega/(g*n_0);
             M[i][i+2]=-1;
         }else{ //for GPb
             M[i][i-2]=-1;
-            M[i][i-1]=1;//omegaconj/gn_0;
+            M[i][i-1]=omega/(g*n_0);
             M[i][i]=G_b;
             M[i][i+2]=-1;
         }
@@ -40,7 +44,7 @@ void gpsolver::spatialDiscretiser(int N, float &M[], float g, float n_0, float G
 
 }
 
-void gpsolver::temporalDiscretiser(float M){
+void gpsolver::temporalDiscretiser(matrix & M){
 
 }
 

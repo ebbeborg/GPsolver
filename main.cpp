@@ -4,40 +4,39 @@
 #include "gpsolver.h"
 #include <iostream>;
 
-using namespace std;
-
 int main()
 {
     int N; //gridsize
-    float delta_x; //grid spacing
-    float n_0; //initial density of 2D condensate
-    float V; //external potential
-    float g, g_ab;
-    float G_a, G_b; //constant introduced to write dimensionless discretised GP equation in more convenient way
-    float coherentCoupling;
+    double dx; //grid spacing
+    double n_0; //initial density of 2D condensate
+    double V; //external potential
+    double g, g_ab;
+    double G_a, G_b; //constant introduced to write dimensionless discretised GP equation in more convenient way
+    double coherentCoupling;
     gpsolver homoGP;
 
     //input BEC condensate parameters
-    cout<<"Input initial density of condensate n_0:"; 
-    cin>>n_0;
-    cout<<"Input intraspecies (a on a, b on b) contact constant g:"; 
-    cin>>g;
-    cout<<"Input interspecies (a on b, b on a) contact constant g_ab:"; 
-    cin>>g_ab;
-    cout<<"Input coherent coupling:"; 
-    cin>>coherentCoupling;
+    std::cout<<"Input initial density of condensate n_0:"; 
+    std::cin>>n_0;
+    std::cout<<"Input intraspecies (a on a, b on b) contact constant g:"; 
+    std::cin>>g;
+    std::cout<<"Input interspecies (a on b, b on a) contact constant g_ab:"; 
+    std::cin>>g_ab;
+    std::cout<<"Input coherent coupling:"; 
+    std::cin>>coherentCoupling;
+    
     //input discretisation parameters
-    cout<<"Input gridsize:"; 
-    cin>>N;
-    cout<<"Input grid spacing:"; 
-    cin>>delta_x;
+    std::cout<<"Input gridsize:"; 
+    std::cin>>N;
+    std::cout<<"Input grid spacing:"; 
+    std::cin>>dx;
 
-    //declaring matrix where RHS of discretised GP eqn will live 
-    float M[N][N]={};
+    //defining a matrix variable type
+    matrix M;
 
     //dimensionalising constant G
-    G_a=homoGP.discretisedConstant(g, g_ab, n_0, delta_x);
-    G_b=homoGP.discretisedConstant(g, g_ab, n_0, delta_x);
+    G_a=homoGP.discretisedConstant(g, g_ab, n_0, dx);
+    G_b=homoGP.discretisedConstant(g, g_ab, n_0, dx);
 
     homoGP.spatialDiscretiser(N, M, g, n_0, G_a, G_b, coherentCoupling);
     homoGP.temporalDiscretiser(M);

@@ -6,19 +6,23 @@
 #ifndef GPSOLVER_H
 #define GPSOLVER_H
 
+#include <vector>;
+
+typedef std::vector<std::vector<double>> matrix;
+
 class gpsolver {
         public:
+            
             //Finds constant for spatially discretised wavefunction at each grid point G
-            float discretisedConstant(float, float, float, float);
+            double discretisedConstant(double, double, double, double);
             
             //spatially discretises RHS of coupled GP eqn  in 1D using FDM
-            void spatialDiscretiser(int, float, float, float, float, float, float);
+            void spatialDiscretiser(int, matrix &, double, double, double, double, double);
 
             //solves eigenproblem (resulting from discretisation) using Runge-Kutter method
-            void temporalDiscretiser(float);
+            void temporalDiscretiser(matrix &);
 
         private:
 };
-
 
 #endif
