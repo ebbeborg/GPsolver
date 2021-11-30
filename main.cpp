@@ -2,7 +2,7 @@
 //ihd/dt(x_b)=((-1/2m)(hbar^2)(Del^2) + g_b(x_b)^2 +g_ab(x_a)^2)x_b + omega^*(x_a)
 
 #include "gpsolver.h"
-#include <iostream>;
+#include <iostream>
 
 int main()
 {

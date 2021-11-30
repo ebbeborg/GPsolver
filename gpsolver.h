@@ -6,7 +6,7 @@
 #ifndef GPSOLVER_H
 #define GPSOLVER_H
 
-#include <vector>;
+#include <vector>
 
 typedef std::vector<std::vector<double>> matrix;
 
