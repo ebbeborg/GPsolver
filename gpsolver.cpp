@@ -13,7 +13,7 @@ double gpsolver::discretisedConstant(double g, double g_ab, double n_0, double d
 
 void gpsolver::spatialDiscretiser(int N, matrix & M, double g, double n_0, double G_a, double G_b, double omega){
     
-    //check if gridsize is even
+    //check if matrix dimension is even
     if (N%2!=0){
         cout<<"Please enter an even grid size N"<<endl;
         exit(1);                    

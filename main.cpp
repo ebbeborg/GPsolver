@@ -6,6 +6,7 @@
 
 int main()
 {
+    //declaring parameters
     int N; //gridsize
     double dx; //grid spacing
     double n_0; //initial density of 2D condensate
