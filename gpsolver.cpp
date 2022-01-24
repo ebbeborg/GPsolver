@@ -7,45 +7,29 @@
 
 using namespace std;
 
-double gpsolver::discretisedConstant(double g, double g_ab, double n_0, double dx){
+double gpsolver::C(double psi[], double g, double g_ab, double n_0, double dx){
 
 }
 
-void gpsolver::spatialDiscretiser(int N, matrix & M, double g, double n_0, double G_a, double G_b, double omega){
-    
-    //check if matrix dimension is even
-    if (N%2!=0){
-        cout<<"Please enter an even grid size N"<<endl;
-        exit(1);                    
-    }
+void gpsolver::spatialDiscretiser(int N, double psi[], double g, double g_ab, double n_0, double dx , double omega){
 
-    //filling out top and bottom 2 rows of matrix M to ensure 1D grip loops
-    M[0][N-2]=M[0][N-1]=M[N-2][0]=M[N-1][1]=-1;
-    M[0][0]=M[N-2][N-2]=G_a;
-    M[0][1]=M[N-2][N-1]=1;//omega/gn_0;
-    M[1][1]=M[N-1][N-1]=G_b;
-    M[1][0]=M[N-1][N-2]=1;//omegaconj/gn_0;
+    double C_a, C_b; //constant introduced to write dimensionless discretised GP equation in more convenient way
+    C_a=gpsolver::C(psi, g, g_ab, n_0, dx);
+    C_b=gpsolver::C(psi, g, g_ab, n_0, dx);
 
-    //filling out all other rows of M
-    for (int i=2; i<N-1; i++){
-        if (i%2==0){ //for GPa
-            M[i][i-2]=-1;
-            M[i][i]=G_a;
-            M[i][i+1]=omega/(g*n_0);
-            M[i][i+2]=-1;
-        }else{ //for GPb
-            M[i][i-2]=-1;
-            M[i][i-1]=omega/(g*n_0);
-            M[i][i]=G_b;
-            M[i][i+2]=-1;
+    //calculating Mx for each gridpoint i
+    for (int i=0; i<N; i++){
+        if (i%2==0){ //even entries are for condensate a
+
+        }else{ //odd entries for condensate b
+
         }
     }
-
-
 }
 
-void gpsolver::temporalDiscretiser(matrix & M){
+void gpsolver::RK4(int N, double psi[], double g, double g_ab, double n_0, double dx, double omega){
 
+    gpsolver::spatialDiscretiser(N, psi, g, g_ab, n_0, dx, omega);
 }
 
 

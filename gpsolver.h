@@ -8,19 +8,19 @@
 
 #include <vector>
 
-typedef std::vector<std::vector<double>> matrix;
+//typedef std::vector<std::vector<double>> matrix;
 
 class gpsolver {
         public:
             
             //Finds constant for spatially discretised wavefunction at each grid point G
-            double discretisedConstant(double, double, double, double);
+            double C(double psi[], double g, double g_ab, double n_0, double dx);
             
             //spatially discretises RHS of coupled GP eqn  in 1D using FDM
-            void spatialDiscretiser(int, matrix &, double, double, double, double, double);
+            void spatialDiscretiser(int N, double psi[], double g, double g_ab, double n_0, double dx , double omega);
 
             //solves eigenproblem (resulting from discretisation) using Runge-Kutter method
-            void temporalDiscretiser(matrix &);
+            void RK4(int N, double psi[], double g, double g_ab, double n_0, double dx, double omega);
 
         private:
 };

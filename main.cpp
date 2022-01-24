@@ -12,18 +12,18 @@ int main()
     double n_0; //initial density of 2D condensate
     double V; //external potential
     double g, g_ab;
-    double G_a, G_b; //constant introduced to write dimensionless discretised GP equation in more convenient way
     double coherentCoupling;
     gpsolver homoGP;
 
     //input discretisation parameters
     std::cout<<"Input gridsize:"; 
     std::cin>>N;
-    std::cout<<"Input grid spacing:"; 
+        if (N%2!=0){
+            std::cout<<"Please enter an even grid size N"<<std::endl;
+            exit(1);                    
+        }
+    std::cout<<"Input grid spacing:";
     std::cin>>dx;
-
-    //defining a matrix variable type
-    matrix M;
 
     //input BEC parameters
     std::cout<<"Input initial density of condensate n_0:"; 
@@ -35,12 +35,15 @@ int main()
     std::cout<<"Input coherent coupling:"; 
     std::cin>>coherentCoupling;
 
-    //dimensionalising constant G
-    G_a=homoGP.discretisedConstant(g, g_ab, n_0, dx);
-    G_b=homoGP.discretisedConstant(g, g_ab, n_0, dx);
+    //initial size of wavefunction (has to accomodate both a and b so 2*N)
+    int temp=2*N;
+    //initial condensate wavefunction
+    double psi[temp];
 
-    homoGP.spatialDiscretiser(N, M, G_a, G_b, g, n_0, coherentCoupling);
-    homoGP.temporalDiscretiser(M);
+    //evaluating psi in time increments using RK4
+    homoGP.RK4(N, psi, g, g_ab, n_0, dx, coherentCoupling);
+
+    //piping results to file
 
     return 0;
 }
