@@ -39,7 +39,7 @@ GPsolver homoGP;
     double psi_init[parameters.N];
 
     //evaluating psi in time increments using RK4 using initial condensate wavefunction psi_init
-    homoGP.RK4(psi_init, Condensate_parameters& parameters);
+    homoGP.RK4(psi_init, BEC_parameters& parameters);
     //HomoGP.RK4(psi_init, g, g_ab, n_0, dx, coherentCoupling);
 
     //piping results to file
