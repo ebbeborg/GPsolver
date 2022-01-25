@@ -520,6 +520,33 @@ ExperimentalBuild/fast:
 	$(MAKE) -f CMakeFiles/ExperimentalBuild.dir/build.make CMakeFiles/ExperimentalBuild.dir/build
 .PHONY : ExperimentalBuild/fast
 
+gpsolver.o: gpsolver.cpp.o
+
+.PHONY : gpsolver.o
+
+# target to build an object file
+gpsolver.cpp.o:
+	$(MAKE) -f CMakeFiles/CMakeLists.dir/build.make CMakeFiles/CMakeLists.dir/gpsolver.cpp.o
+.PHONY : gpsolver.cpp.o
+
+gpsolver.i: gpsolver.cpp.i
+
+.PHONY : gpsolver.i
+
+# target to preprocess a source file
+gpsolver.cpp.i:
+	$(MAKE) -f CMakeFiles/CMakeLists.dir/build.make CMakeFiles/CMakeLists.dir/gpsolver.cpp.i
+.PHONY : gpsolver.cpp.i
+
+gpsolver.s: gpsolver.cpp.s
+
+.PHONY : gpsolver.s
+
+# target to generate assembly for a file
+gpsolver.cpp.s:
+	$(MAKE) -f CMakeFiles/CMakeLists.dir/build.make CMakeFiles/CMakeLists.dir/gpsolver.cpp.s
+.PHONY : gpsolver.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -587,6 +614,9 @@ help:
 	@echo "... ContinuousTest"
 	@echo "... ContinuousUpdate"
 	@echo "... ExperimentalBuild"
+	@echo "... gpsolver.o"
+	@echo "... gpsolver.i"
+	@echo "... gpsolver.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

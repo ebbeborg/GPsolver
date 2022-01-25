@@ -6,21 +6,30 @@
 #ifndef GPSOLVER_H
 #define GPSOLVER_H
 
-#include <vector>
+//organising relevant condensate parameters
+class BEC_parameters {
+    public:
+        //declaring parameters
+        double gridsize; //number of points/nodes on our condensate 1D grid
+        double N; //size of our wavefunction variable
+        double dx; //grid spacing
+        double n_0; //initial density of 2D condensate
+        double V; //external potential
+        double g, g_ab; //interaction constants
+        double omega; //coherent coupling
+};
 
-//typedef std::vector<std::vector<double>> matrix;
-
-class gpsolver {
+class GPsolver {
         public:
             
-            //Finds constant for spatially discretised wavefunction at each grid point G
-            double C(double psi[], double g, double g_ab, double n_0, double dx);
+            //Finds constant for spatially discretised wavefunction at each grid point 
+            double C(double k[], BEC_parameters& parameters);
             
-            //spatially discretises RHS of coupled GP eqn  in 1D using FDM
-            void spatialDiscretiser(int N, double psi[], double g, double g_ab, double n_0, double dx , double omega);
-
+            //spatially discretises RHS of coupled GP eqn  in 1D using FDM andreturns -iMk
+            double spatialDiscretiser(double k[], BEC_parameters& parameters);
+            
             //solves eigenproblem (resulting from discretisation) using Runge-Kutter method
-            void RK4(int N, double psi[], double g, double g_ab, double n_0, double dx, double omega);
+            void RK4(double psi_init[], BEC_parameters& parameters);
 
         private:
 };

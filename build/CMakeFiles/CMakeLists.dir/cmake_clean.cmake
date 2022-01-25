@@ -1,5 +1,6 @@
 file(REMOVE_RECURSE
   "CMakeFiles/CMakeLists.dir/main.cpp.o"
+  "CMakeFiles/CMakeLists.dir/gpsolver.cpp.o"
   "CMakeLists.pdb"
   "CMakeLists"
 )

@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/gpsolver.cpp
+gpsolver.h
+/home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/gpsolver.h
+stdlib.h
+-
+iostream
+-
+stdio.h
+-
+
+/home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/gpsolver.h
+vector
+-
+
+/home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/main.cpp
+gpsolver.h
+/home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/gpsolver.h
+iostream
+-
+
