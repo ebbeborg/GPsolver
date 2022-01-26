@@ -13,7 +13,7 @@ class BEC_parameters {
         int gridsize; //number of points/nodes on our condensate 1D grid
         int N=2*gridsize; //size of our wavefunction variable (twice the gridsize to accomodate both components a&b)
         double dx; //grid spacing
-        //double dt=1; //timestep set to 1 right now
+        double dt=1; //timestep set to 1 right now
         double runtime; //total time
         //condensate parameters
         double n_0; //initial density of 2D condensate

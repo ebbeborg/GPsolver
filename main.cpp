@@ -2,6 +2,7 @@
 //ihd/dt(x_b)=((-1/2m)(hbar^2)(Del^2) + g_b(x_b)^2 +g_ab(x_a)^2)x_b + omega^*(x_a)
 //step time dt?
 //generating psi_init?
+//healing factor?
 
 #include "gpsolver.h"
 #include <iostream>
@@ -36,20 +37,17 @@ GPsolver GPsolver;
     std::cout<<"Input coherent coupling:"; 
     std::cin>>parameter.omega;
 
-    //initial size of wavefunction (has to accomodate both a and b so 2*N)
     //generating initial wavefunction of condensate
-    double psi_init[parameter.N];
-    double psi[parameter.N];
+    double psi_init[parameter.N], psi[parameter.N];
 
     for (int i=0; i<parameter.N; i++){
         psi[i]=psi_init[i];
     }
 
     //evaluating psi in time increments using RK4 using initial condensate wavefunction psi_init
-    //step time set to 1
     for(int t=0; t<parameter.runtime; t++ ){
-        GPsolver.RK4(psi); //returns new psi after one time step
-        //piping result to file
+        GPsolver.RK4(psi); //iterates psi by one time step
+        //pipes iterated psi to results file
     }
 
     return 0;
