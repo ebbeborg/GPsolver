@@ -6,12 +6,12 @@
 #ifndef GPSOLVER_H
 #define GPSOLVER_H
 
-//organising relevant condensate parameters
+//storing relevant condensate parameters
 class BEC_parameters {
     public:
         //declaring parameters
-        double gridsize; //number of points/nodes on our condensate 1D grid
-        double N; //size of our wavefunction variable
+        int gridsize; //number of points/nodes on our condensate 1D grid
+        int N; //size of our wavefunction variable
         double dx; //grid spacing
         double n_0; //initial density of 2D condensate
         double V; //external potential
@@ -30,8 +30,6 @@ class GPsolver {
             
             //solves eigenproblem (resulting from discretisation) using Runge-Kutter method
             void RK4(double psi_init[], BEC_parameters& parameters);
-
-        private:
 };
 
 #endif

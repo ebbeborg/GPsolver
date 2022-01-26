@@ -1,6 +1,5 @@
 //ihd/dt(x_a)=((-1/2m)(hbar^2)(Del^2) + g_a(x_a)^2 +g_ab(x_b)^2)x_a + omega(x_b)
 //ihd/dt(x_b)=((-1/2m)(hbar^2)(Del^2) + g_b(x_b)^2 +g_ab(x_a)^2)x_b + omega^*(x_a)
-
 //step time dt?
 //generating psi_init?
 
@@ -16,7 +15,7 @@ GPsolver homoGP;
     //input discretisation parameters
     std::cout<<"Input gridsize:"; 
     std::cin>>parameters.gridsize;
-        if (gridsize%2!=0){
+        if (parameters.gridsize%2!=0){
             std::cout<<"Please enter an even grid size N"<<std::endl;
             exit(1);                    
         }
@@ -39,8 +38,7 @@ GPsolver homoGP;
     double psi_init[parameters.N];
 
     //evaluating psi in time increments using RK4 using initial condensate wavefunction psi_init
-    homoGP.RK4(psi_init, BEC_parameters& parameters);
-    //HomoGP.RK4(psi_init, g, g_ab, n_0, dx, coherentCoupling);
+    homoGP.RK4(psi_init, parameters);
 
     //piping results to file
 
