@@ -9,27 +9,30 @@
 //storing relevant condensate parameters
 class BEC_parameters {
     public:
-        //declaring parameters
+        //discretisation parameters
         int gridsize; //number of points/nodes on our condensate 1D grid
-        int N; //size of our wavefunction variable
+        int N=2*gridsize; //size of our wavefunction variable (twice the gridsize to accomodate both components a&b)
         double dx; //grid spacing
+        //double dt=1; //timestep set to 1 right now
+        double runtime; //total time
+        //condensate parameters
         double n_0; //initial density of 2D condensate
         double V; //external potential
         double g, g_ab; //interaction constants
         double omega; //coherent coupling
 };
 
-class GPsolver {
+class GPsolver: public BEC_parameters { 
         public:
             
             //Finds constant for spatially discretised wavefunction at each grid point 
-            double C(double k[], BEC_parameters& parameters);
+            double C(double k[]);
             
             //spatially discretises RHS of coupled GP eqn  in 1D using FDM andreturns -iMk
-            double spatialDiscretiser(double k[], BEC_parameters& parameters);
+            double spatialDiscretiser(double k[]);
             
             //solves eigenproblem (resulting from discretisation) using Runge-Kutter method
-            void RK4(double psi_init[], BEC_parameters& parameters);
+            void RK4(double psi[]);
 };
 
 #endif
