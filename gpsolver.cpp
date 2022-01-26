@@ -14,11 +14,11 @@ double GPsolver::C(double k[], BEC_parameters& parameters){
 double GPsolver::spatialDiscretiser(double k[], BEC_parameters& parameters){
 
     double C_a, C_b; //constant introduced to write dimensionless discretised GP equation in more convenient way 
-    C_a=gpsolver::C(k, parameters);
-    C_b=gpsolver::C(k, parameters);
+    C_a=GPsolver::C(k, parameters);
+    C_b=GPsolver::C(k, parameters);
 
     //calculating Mk for each gridpoint i
-    for (int i=0; i<N; i++){
+    for (int i=0; i<parameters.N; i++){
         if (i%2==0){ //even entries are for condensate a
 
         }else{ //odd entries for condensate b
@@ -38,7 +38,7 @@ void GPsolver::RK4(double psi_init[], BEC_parameters& parameters){
     for (int i=0; i<parameters.N; i++){
         k_1[i]=psi_init[i];
     }
-    Mk_1=GPsolver::spatialDiscretiser(k_1, parameters);
+    //Mk_1=GPsolver::spatialDiscretiser(k_1, parameters);
 }
 
 
