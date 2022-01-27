@@ -1,17 +1,17 @@
 //ihd/dt(x_a)=((-1/2m)(hbar^2)(Del^2) + g_a(x_a)^2 +g_ab(x_b)^2)x_a + omega(x_b)
 //ihd/dt(x_b)=((-1/2m)(hbar^2)(Del^2) + g_b(x_b)^2 +g_ab(x_a)^2)x_b + omega^*(x_a)
-//step time dt?
 //generating psi_init?
 //healing factor?
 
-#include "gpsolver.h"
 #include <iostream>
+#include <complex>
+#include "gpsolver.h"
 
 int main(){
 
 //declaring objects to store BEC parameters and functions
-BEC_parameters parameter;
-GPsolver GPsolver;
+    BEC_parameters parameter;
+    GPsolver GPsolver; 
 
     //input discretisation parameters
     std::cout<<"Input gridsize:"; 
@@ -38,7 +38,7 @@ GPsolver GPsolver;
     std::cin>>parameter.omega;
 
     //generating initial wavefunction of condensate
-    double psi_init[parameter.N], psi[parameter.N];
+    dcomp psi_init[parameter.N], psi[parameter.N];
 
     for (int i=0; i<parameter.N; i++){
         psi[i]=psi_init[i];
