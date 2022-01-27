@@ -8,12 +8,12 @@
 
 #include <complex>
 typedef std::complex<double> dcomp; //defining complex data type
+extern dcomp I=dcomp(0.,-1.);
 
 //storing relevant condensate parameters
 class BEC_parameters {
     public:
         //discretisation parameters
-        dcomp I;
         int gridsize; //number of points/nodes on our condensate 1D grid
         int N=2*gridsize; //size of our wavefunction variable (twice the gridsize to accomodate both components a&b)
         double dx; //grid spacing

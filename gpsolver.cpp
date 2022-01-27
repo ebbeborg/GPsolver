@@ -11,7 +11,7 @@ void Init_psi_generator(dcomp psi[]){
 
 //solves eigenproblem (resulting from discretisation) using RK4 method to get psi(a0,b0,a1,b1,...,aN-1,bN-1) at +dt
 void GPsolver::RK4(dcomp psi[]){ //remember to multiply Mk's by -i
-    
+
     //declaring variables for RK4
     dcomp k[N];
     dcomp k_1[N], Mk_1[N];
