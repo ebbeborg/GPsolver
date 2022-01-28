@@ -11,18 +11,22 @@ gpsolver.h
 /home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/gpsolver.h
 stdlib.h
 -
+cmath
+-
 iostream
 -
-stdio.h
+fstream
 -
 
 /home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/gpsolver.h
-vector
+complex
 -
 
 /home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/main.cpp
-gpsolver.h
-/home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/gpsolver.h
 iostream
 -
+complex
+-
+gpsolver.h
+/home/ebbeborg1/drive/gu/P5/Finalproject/GPsolver/gpsolver.h
 

@@ -8,24 +8,23 @@
 
 #include <complex>
 typedef std::complex<double> dcomp; //defining complex data type
-extern dcomp I=dcomp(0.,-1.);
 
 //storing relevant condensate parameters
 class BEC_parameters {
     public:
         //discretisation parameters
         int gridsize; //number of points/nodes on our condensate 1D grid
-        int N=2*gridsize; //size of our wavefunction variable (twice the gridsize to accomodate both components a&b)
+        int N; //size of wavefunction variable (twice the gridsize to accomodate both components a&b)
         double dx; //grid spacing
-        double dt=1; //timestep set to 1 right now
         double runtime; //total time
         //condensate parameters
-        double n_0; //initial density of 2D condensate
-        double V_a=0, V_b=0; //external potential
+        double n_0; //density of 2D condensate n_a=n_b=n_0/2
+        double V_a, V_b; //external potential for homogenous system
         double g, g_ab; //interaction constants
         double omega; //coherent coupling
 };
 
+//declaring functions
 class GPsolver: public BEC_parameters { 
         public:
             //generates initial psi

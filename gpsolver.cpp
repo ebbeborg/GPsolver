@@ -3,16 +3,33 @@
 #include "gpsolver.h"
 #include <stdlib.h>
 #include <cmath>
+#include <iostream>
+#include <fstream>
+
+extern const dcomp I=dcomp(0.,-1.); //defining I=-i
 
 //generates initial psi
-void Init_psi_generator(dcomp psi[]){
-    //placeholder
+void GPsolver::Init_psi_generator(dcomp psi[]){
+    
+    std::cout<<n_0<<std::endl;
+    //opening up results file
+    std::ofstream output;
+    output.open("results.txt");
+
+    //generating initial psi for each gridpoint and saving result
+    for (int i=0; i<N; i++){
+        psi[i]=sqrt(n_0); //since norm(psi)=n
+        output<<psi[i]<<","; 
+    }
+    output<<"/n";
+    output.close();
 }
 
 //solves eigenproblem (resulting from discretisation) using RK4 method to get psi(a0,b0,a1,b1,...,aN-1,bN-1) at +dt
-void GPsolver::RK4(dcomp psi[]){ //remember to multiply Mk's by -i
+void GPsolver::RK4(dcomp psi[]){ //remember to multiply Mk's by I=-i
 
     //declaring variables for RK4
+    double dt; //timestep set to 1 right now
     dcomp k[N];
     dcomp k_1[N], Mk_1[N];
     dcomp k_2[N], Mk_2[N];
@@ -43,10 +60,17 @@ void GPsolver::RK4(dcomp psi[]){ //remember to multiply Mk's by -i
     }
     spatialDiscretiser(k_4, Mk_4); //calculating Mk_4
     
-    //new wavefunction after dt time increment
+    //opening up results file
+    std::ofstream output;
+    output.open("results.txt", std::ios_base::app);
+
+    //calculating new psi after dt time increment
     for (int i=0; i<N; i++){
         psi[i]=dt/6.*(Mk_1[i]+2.*Mk_2[i]+2.*Mk_3[i]+Mk_4[i]);
-    }    
+        output << psi[i]<<","; //saving results to file
+    }
+    output<<"\n"; //new line so that next iteration of psi can be appended correctly
+    output.close();
 }
 
 //spatially discretises RHS of coupled GP eqn in 1D using FDM and calculates Mk(a0,b0,a1,b1,...,aN-1,bN-1) 
@@ -55,17 +79,12 @@ void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[]){
     double C[N]; //constant introduced for convenience 
     Const_calc(k, C); //calculates constant for each component at each gridpoint
 
-    Mk[0]=C[0]*k[0]+omega/g*n_0*k[1]-k[2]-k[N-2]; //1st row of Mk (condensate a)
-    Mk[1]=omega/g*n_0*k[0]+C[1]*k[1]-k[3]-k[N-1]; //2nd row of Mk (condensate b)
-    Mk[N-2]=-k[0]-k[N-4]+C[N-2]*k[N-2]+omega/g*n_0*k[N-1]; //2nd last row of Mk (condensate a)
-    Mk[N-1]=-k[1]-k[N-3]+omega/g*n_0*k[N-2]+C[N-1]*k[N-1]; //last row of Mk (condensate b)
-
-    //calculating Mk for each gridpoint 
-    for (int i=2; i<N-2; i++){
+    //calculating Mk for each gridpoint, (N+i)%N to make grid loop 
+    for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            Mk[i]=-k[i-2]+C[i]*k[i]+omega/g*n_0*k[i+1]-k[i+2];
+            Mk[i]=-k[(N+i-2)%N]+C[i]*k[i]+omega/g*n_0*k[i+1]-k[(N+i+2)%N];
         }else{ //odd entries for condensate b
-            Mk[i]=-k[i-2]+omega/g*n_0*k[i-1]+C[i]*k[i]-k[i+2]; //omega needs to be complex conj
+            Mk[i]=-k[(N+i-2)%N]+omega/g*n_0*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]; //omega needs to be complex conj
         }
     }
 }
@@ -74,9 +93,9 @@ void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[]){
 void GPsolver::Const_calc(dcomp k[], double C[]){
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            2/pow(dx,2)+V_a/(g*n_0)+pow(abs(k[i]),2)/n_0+g_ab*pow(abs(k[i+1]),2)/(g*n_0);
+            2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);
         }else{ //odd entries for condensate b
-            2/pow(dx,2)+V_a/(g*n_0)+pow(abs(k[i]),2)/n_0+g_ab*pow(abs(k[i-1]),2)/(g*n_0);
+            2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);
         }
     }
 }
