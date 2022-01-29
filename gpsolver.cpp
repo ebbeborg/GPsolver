@@ -11,7 +11,6 @@ extern const dcomp I=dcomp(0.,-1.); //defining I=-i
 //generates initial psi
 void GPsolver::Init_psi_generator(dcomp psi[]){
     
-    std::cout<<n_0<<std::endl;
     //opening up results file
     std::ofstream output;
     output.open("results.txt");
@@ -21,7 +20,7 @@ void GPsolver::Init_psi_generator(dcomp psi[]){
         psi[i]=sqrt(n_0); //since norm(psi)=n
         output<<psi[i]<<","; 
     }
-    output<<"/n";
+    output<<"\r\n";
     output.close();
 }
 
@@ -29,7 +28,6 @@ void GPsolver::Init_psi_generator(dcomp psi[]){
 void GPsolver::RK4(dcomp psi[]){ //remember to multiply Mk's by I=-i
 
     //declaring variables for RK4
-    double dt; //timestep set to 1 right now
     dcomp k[N];
     dcomp k_1[N], Mk_1[N];
     dcomp k_2[N], Mk_2[N];
@@ -69,7 +67,7 @@ void GPsolver::RK4(dcomp psi[]){ //remember to multiply Mk's by I=-i
         psi[i]=dt/6.*(Mk_1[i]+2.*Mk_2[i]+2.*Mk_3[i]+Mk_4[i]);
         output << psi[i]<<","; //saving results to file
     }
-    output<<"\n"; //new line so that next iteration of psi can be appended correctly
+    output<<"\r\n"; //new line so that next iteration of psi can be appended correctly
     output.close();
 }
 
@@ -93,9 +91,9 @@ void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[]){
 void GPsolver::Const_calc(dcomp k[], double C[]){
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);
+            C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);
         }else{ //odd entries for condensate b
-            2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);
+            C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);
         }
     }
 }

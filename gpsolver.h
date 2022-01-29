@@ -13,15 +13,16 @@ typedef std::complex<double> dcomp; //defining complex data type
 class BEC_parameters {
     public:
         //discretisation parameters
-        int gridsize; //number of points/nodes on our condensate 1D grid
-        int N; //size of wavefunction variable (twice the gridsize to accomodate both components a&b)
-        double dx; //grid spacing
-        double runtime; //total time
+        int gridsize=100; //number of points/nodes on our condensate 1D grid
+        int N=2*gridsize; //size of wavefunction variable (twice the gridsize to accomodate both components a&b)
+        double dx=0.1; //grid spacing
+        double runtime=100; //total time
+        double dt=1; //time stepsize
         //condensate parameters
-        double n_0; //density of 2D condensate n_a=n_b=n_0/2
-        double V_a, V_b; //external potential for homogenous system
-        double g, g_ab; //interaction constants
-        double omega; //coherent coupling
+        double n_0=1/dx; //density of 2D condensate n_a=n_b=n_0/2
+        double V_a=0, V_b=0; //external potential for homogenous system
+        double g=1, g_ab=0.1; //interaction constants
+        double omega=0; //coherent coupling
 };
 
 //declaring functions
