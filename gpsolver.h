@@ -17,10 +17,10 @@ class BEC_parameters {
         int N=2*gridsize; //size of wavefunction variable (twice the gridsize to accomodate both components a&b)
         double dx=L/gridsize; //grid spacing
         double runtime=10; //total time
-        double dt=1; //time stepsize
+        double dt=0.01; //time stepsize
         //condensate parameters
         double L=20;
-        double n_0=1/dx; //density of 2D condensate n_a=n_b=n_0/2, 10^6 /m
+        double n_0=1/L; //total density of 2D condensate n_a=n_b=n_0/2, 10^6 /m
         double V_a=0, V_b=0; //external potential for homogenous system
         double g=1, g_ab=0.1; //interaction constants
         double omega=0; //coherent coupling

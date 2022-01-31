@@ -17,7 +17,7 @@ void GPsolver::Init_psi_generator(dcomp psi[]){
 
     //generating initial psi for each gridpoint and saving result
     for (int i=0; i<N; i++){
-        psi[i]=sqrt(n_0); //since norm(psi)=n
+        psi[i]=sqrt(n_0/2); //since norm(psi)=n
         output<<psi[i]<<","; 
     }
     output<<"\r\n";
