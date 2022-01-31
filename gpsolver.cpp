@@ -80,9 +80,9 @@ void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[]){
     //calculating Mk for each gridpoint, (N+i)%N to make grid loop 
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            Mk[i]=-k[(N+i-2)%N]+C[i]*k[i]+omega/g*n_0*k[i+1]-k[(N+i+2)%N];
+            Mk[i]=-k[(N+i-2)%N]/pow(dx,2)+C[i]*k[i]+omega/g*n_0*k[i+1]-k[(N+i+2)%N]/pow(dx,2);
         }else{ //odd entries for condensate b
-            Mk[i]=-k[(N+i-2)%N]+omega/g*n_0*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]; //omega needs to be complex conj
+            Mk[i]=-k[(N+i-2)%N]/pow(dx,2)+omega/g*n_0*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]/pow(dx,2); //omega needs to be complex conj
         }
     }
 }
