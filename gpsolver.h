@@ -15,10 +15,11 @@ class BEC_parameters {
         //discretisation parameters
         int gridsize=100; //number of points/nodes on our condensate 1D grid
         int N=2*gridsize; //size of wavefunction variable (twice the gridsize to accomodate both components a&b)
-        double dx=0.000001; //grid spacing
+        double dx=L/gridsize; //grid spacing
         double runtime=10; //total time
         double dt=1; //time stepsize
         //condensate parameters
+        double L=20;
         double n_0=1/dx; //density of 2D condensate n_a=n_b=n_0/2, 10^6 /m
         double V_a=0, V_b=0; //external potential for homogenous system
         double g=1, g_ab=0.1; //interaction constants
