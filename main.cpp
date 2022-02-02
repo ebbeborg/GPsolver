@@ -1,9 +1,7 @@
-//to do:
-//generating psi_init?
-//piping psi results to file
+//GPE is dimensionless
 
 #include <iostream>
-#include <complex>
+#include <fstream>
 #include "gpsolver.h"
 
 int main(){
@@ -12,34 +10,27 @@ int main(){
     BEC_parameters parameter; //declaring object to store BEC parameters
     GPsolver GPsolver; //declaring object that allows access to GPsolver functions
 
-    //input discretisation parameters and storing in parameter class
-    //std::cout<<"Input gridsize:"; 
-    //std::cin>>parameter.gridsize;
-    //    if (parameter.gridsize%2!=0){
-    //        std::cout<<"Please enter an even grid size N"<<std::endl;
-    //        exit(1);                    
-    //    }
-
-    //std::cout<<"Input grid spacing:";
-    //std::cin>>parameter.dx;
-    //std::cout<<"Input runtime:";
-    //std::cin>>parameter.runtime;
-
-    //input BEC parameters and storing in parameter class
-    //std::cout<<"Input intraspecies (a on a, b on b) contact interaction g:"; 
-    //std::cin>>parameter.g;
-    //std::cout<<"Input interspecies (a on b, b on a) contact interaction g_ab:"; 
-    //std::cin>>parameter.g_ab;
-    //std::cout<<"Input coherent coupling:"; 
-    //std::cin>>parameter.omega;
-
     //generating initial condensate wavefunction psi at t=0 and saving to results file
     dcomp psi[parameter.N];
     GPsolver.Init_psi_generator(psi);
 
     //evaluating psi in time increments using RK4
-    for(int t=0; t<parameter.runtime; t++ ){
+    for(int t=1; t<100*parameter.runtime; t++ ){
+        
         GPsolver.RK4(psi); //iterates psi by one time step dt
+        
+        if(t%10==0){ //saving every 10th iteration
+            
+            std::ofstream output; //opening up results file
+            output.open("results.txt", std::ios_base::app);
+            
+            for(int i=0; i<parameter.N; i++){
+                output<<norm(psi[i])<<","; //saving results to "results.txt"
+            }
+
+            output<<"\r\n"; //new line so that next iteration of psi can be appended correctly
+            output.close();
+        }
     }
 
     return 0;
