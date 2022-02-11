@@ -6,18 +6,31 @@
 #include <iostream>
 #include <fstream>
 
+dcomp I=dcomp(0.,1.); //defining i
+
 //generates initial psi
-void GPsolver::Init_psi_generator(dcomp psi[]){
+void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
     
+    //creating spatial grid
+    for (int i=1; i<N; i++){
+        x[i]=x[i-1]+dx;
+    }
+
     //opening up results file
     std::ofstream output;
     output.open("results.txt");
 
     //generating initial psi for each gridpoint and saving result
     for (int i=0; i<N; i++){
-        psi[i]=sqrt(n_0/2); //since norm(psi)=n
+        psi[i]+=sqrt(n_0/2); //since norm(psi)=n
+        
+        if(excitation){ //add excitation at x=0
+            psi[i]+=exp(I*((k_0*x[i])-pow((x[i]-x_0)/width,2)/2));
+        }
+
         output<<norm(psi[i])<<","; 
     }
+
     output<<"\r\n";
     output.close();
 }
@@ -67,7 +80,6 @@ void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[]){
 
     dcomp C[N]; //constant introduced for convenience 
     Const_calc(k, C); //calculates constant for each component at each gridpoint
-    dcomp I=dcomp(0.,1.); //defining i
 
     //calculating -iMk for each gridpoint, (N+i)%N to make grid loop 
     for (int i=0; i<N; i++){
@@ -83,9 +95,11 @@ void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[]){
 void GPsolver::Const_calc(dcomp k[], dcomp C[]){
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);
+            //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);
+            C[i]=2/pow(dx,2)+g_ab*(norm(k[i+1])-norm(k[i]))/(g*n_0)-abs(omega)/(g*n_0); //to get rid of e^-i*mu*t/hbar dependance
         }else{ //odd entries for condensate b
-            C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);
+            //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);
+            C[i]=2/pow(dx,2)+g_ab*(norm(k[i-1])-norm(k[i]))/(g*n_0)-abs(omega)/(g*n_0);
         }
     }
 }

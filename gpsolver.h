@@ -17,20 +17,24 @@ class BEC_parameters {
         int N=2*gridsize; //size of psi[N] (twice the gridsize to accomodate both components a&b)
         double runtime=10; //total time
         double dt=0.01; //time stepsize
-        //condensate parameters
+        //ground state homogenous symmetric condensate parameters (GS1)
         double L=20; //length of system, 20 healing lengths
         double dx=L/gridsize; //grid spacing
         double n_0=1/L; //total density of 2D condensate n_a=n_b=n_0/2
         double V_a=0, V_b=0; //external potential for homogenous system
         double g=1, g_ab=0.1; //interaction constants
         double omega=0; //coherent coupling
+        //excitation wavepacket parameters
+        double x_0=0; //initial position of packet
+        double k_0; //wavevector of packet 
+        double width=25;//packet spatial width in healing lengths
 };
 
 //declaring functions
 class GPsolver: public BEC_parameters { 
         public:
             //generates initial psi
-            void Init_psi_generator(dcomp psi[]);
+            void Init_psi_generator(dcomp psi[], bool excitation, double x[]);
 
             //solves eigenproblem (resulting from discretisation) using RK4 method to get psi(a0,b0,a1,b1,...,aN-1,bN-1) at +dt
             void RK4(dcomp psi[]);

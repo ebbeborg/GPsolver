@@ -10,9 +10,12 @@ int main(){
     BEC_parameters parameter; //declaring object to store BEC parameters
     GPsolver GPsolver; //declaring object that allows access to GPsolver functions
 
+    //generating spatial grid
+    double x[parameter.N]={};
+
     //generating initial condensate wavefunction psi at t=0 and saving to results file
     dcomp psi[parameter.N];
-    GPsolver.Init_psi_generator(psi);
+    GPsolver.Init_psi_generator(psi, true, x);
 
     //evaluating psi in time increments using RK4
     for(int t=1; t<100*parameter.runtime; t++ ){
