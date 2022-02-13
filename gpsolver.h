@@ -25,9 +25,9 @@ class BEC_parameters {
         double g=1, g_ab=0.1; //interaction constants
         double omega=0; //coherent coupling
         //excitation wavepacket parameters
-        double x_0=0; //initial position of packet
-        double k_0; //wavevector of packet 
-        double width=25;//packet spatial width in healing lengths
+        double x_0=5; //initial position of packet
+        double k_0=0.8; //wavevector of packet 
+        double width=2;//packet spatial width in healing lengths
 };
 
 //declaring functions
