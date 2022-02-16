@@ -21,7 +21,7 @@ int main(){
         
         GPsolver.RK4(psi); //iterates psi by one time step dt
         
-        if(t%10==0){ //saving every 10th iteration
+        if(t%100==0){ //saving every 10th iteration
             
             std::ofstream output; //opening up results file
             output.open("results/results.txt", std::ios_base::app);
