@@ -1,4 +1,4 @@
-//GPE is dimensionless
+//GPE is dimensionless and removed e^-imut/hbar time dependance
 
 #include <iostream>
 #include <fstream>

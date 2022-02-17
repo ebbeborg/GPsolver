@@ -104,9 +104,11 @@ void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[]){
     //calculating -iMk for each gridpoint, (N+i)%N to make grid loop 
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+C[i]*k[i]+omega/g*n_0*k[i+1]-k[(N+i+2)%N]/pow(dx,2));
+            //Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+C[i]*k[i]+omega/g*n_0*k[i+1]-k[(N+i+2)%N]/pow(dx,2));
+            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+C[i]*k[i]+omega*k[i+1]-k[(N+i+2)%N]/pow(dx,2));
         }else{ //odd entries for condensate b
-            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+omega/g*n_0*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]/pow(dx,2)); //omega needs to be complex conj
+            //Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+omega/g*n_0*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]/pow(dx,2)); //omega needs to be complex conj
+            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+omega*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]/pow(dx,2));
         }
     }
 }
@@ -116,10 +118,12 @@ void GPsolver::Const_calc(dcomp k[], dcomp C[]){
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
             //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);
-            C[i]=2/pow(dx,2)+g_ab*(norm(k[i+1])-norm(k[i]))/(g*n_0)-abs(omega)/(g*n_0); //to get rid of e^-i*mu*t/hbar dependance
+            //C[i]=2/pow(dx,2)+g_ab*(norm(k[i+1])-norm(k[i]))/(g*n_0)+abs(omega)/(g*n_0);
+            C[i]=2/pow(dx,2)+g_ab*(norm(k[i+1])-norm(k[i]))/(g*n_0)+abs(omega); 
         }else{ //odd entries for condensate b
             //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);
-            C[i]=2/pow(dx,2)+g_ab*(norm(k[i-1])-norm(k[i]))/(g*n_0)-abs(omega)/(g*n_0);
+            //C[i]=2/pow(dx,2)+g_ab*(norm(k[i-1])-norm(k[i]))/(g*n_0)+abs(omega)/(g*n_0);
+            C[i]=2/pow(dx,2)+g_ab*(norm(k[i-1])-norm(k[i]))/(g*n_0)+abs(omega);
         }
     }
 }

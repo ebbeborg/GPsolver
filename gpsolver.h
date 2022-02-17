@@ -9,7 +9,7 @@
 #include <complex>
 typedef std::complex<double> dcomp; //defining complex data type
 
-//storing relevant condensate parameters
+//storing relevant condensate parameters (in healing lengths)
 class BEC_parameters {
     public:
         //discretisation parameters
@@ -18,16 +18,16 @@ class BEC_parameters {
         double runtime=100; //total time
         double dt=0.01; //time stepsize
         //ground state homogenous symmetric condensate parameters (GS1)
-        double L=1000; //length of system in healing lengths
+        double L=1000; //length of system
         double dx=L/gridsize; //grid spacing
         double n_0=1/L; //total density of 2D condensate n_a=n_b=n_0/2
         double V_a=0, V_b=0; //external potential for homogenous system
         double g=1, g_ab=0.8; //interaction constants
-        double omega=0.16*g*n_0; //coherent coupling
+        double omega=0.16; //coherent coupling
         //excitation wavepacket parameters
         double x_0=300; //initial position of packet
         double k_0=1; //wavevector of packet 
-        double width=25;//packet spatial width in healing lengths
+        double width=25;//packet spatial width
 };
 
 //declaring functions
