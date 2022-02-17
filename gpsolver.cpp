@@ -10,24 +10,11 @@ dcomp I=dcomp(0.,1.); //defining i
 
 //generates initial psi
 void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
-    
-    //storing spatial grid in results file
-    //std::ofstream grid;
-    //grid.open("results/spacegrid.txt");
-    //grid<<x[0]<<",";
 
     //creating spatial grid
     for (int i=1; i<gridsize; i++){
         x[i]=x[i-1]+dx;
-        //grid<<x[i];
-        
-        //if(i<gridsize-1){
-        //    grid<<",";
-        //}
     }
-
-    //grid<<"\r\n";
-    //grid.close();
 
     //opening up results file
     std::ofstream output;
@@ -39,9 +26,9 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
         
         if(excitation){ //add excitation at x_0
             if(i%2==0){ //condensate a
-                psi[i]+=0.1*exp(I*(k_0*x[i/2])-pow((x[i/2]-x_0)/width,2)/2); 
+                psi[i]+=0.001*exp(I*(k_0*x[i/2])-pow((x[i/2]-x_0)/width,2)/2); 
             }else{ //condensate b
-                psi[i]-=0.1*exp(I*(k_0*x[(i-1)/2])-pow((x[(i-1)/2]-x_0)/width,2)/2);
+                psi[i]-=0.001*exp(I*(k_0*x[(i-1)/2])-pow((x[(i-1)/2]-x_0)/width,2)/2);
             }
         }
 
