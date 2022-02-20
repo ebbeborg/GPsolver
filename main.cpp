@@ -6,22 +6,24 @@
 
 int main(){
 
+    //declaring objects
     BEC_parameters parameter; //declaring object to store BEC parameters
     GPsolver GPsolver; //declaring object that allows access to GPsolver functions
 
-    //generating spatial grid
-    double x[parameter.gridsize]={};
+    //declaring parameters
+    dcomp psi[parameter.N]; //condensate wavefunction storing components a & b
+    double x[parameter.N]= {}; //spatial grid
+    double omega[parameter.N]; //coherent coupling    
 
-    //generating initial condensate wavefunction psi at t=0 and saving to results file
-    dcomp psi[parameter.N];
-    GPsolver.Init_psi_generator(psi, true, x); //(orderparameter, excitation true/false, gridspace)
+    //generating initial condensate system at t=0, ie wavefunction psi, spatial grid x, coherent coupling omega
+    GPsolver.Init_psi_generator(psi, true, x, omega); //(orderparameter, excitation true/false, gridspace)
 
     //evaluating psi in time increments using RK4
-    for(int t=1; t<100*parameter.runtime; t++ ){
+    for(int t=1; t<1000*parameter.runtime; t++ ){
         
-        GPsolver.RK4(psi); //iterates psi by one time step dt
+        GPsolver.RK4(psi, omega); //iterates psi by one time step dt
         
-        if(t%100==0){ //saving every 10th iteration
+        if(t%1000==0){ //saving every 100th iteration
             
             std::ofstream output; //opening up results file
             output.open("results/results.txt", std::ios_base::app);

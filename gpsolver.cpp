@@ -8,12 +8,25 @@
 
 dcomp I=dcomp(0.,1.); //defining i
 
-//generates initial psi
-void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
+//generates initial psi and excitation
+void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[], double omega[]){
 
-    //creating spatial grid
-    for (int i=1; i<gridsize; i++){
-        x[i]=x[i-1]+dx;
+    //generating spatial grid 
+    for (int i=1; i<N; i++){
+        if(i%2==0){
+            x[i]=x[i-1]+dx;
+        }else{
+            x[i]=x[i-1];
+        }
+    }
+
+    //generating coherent coupling for modulation of system
+    for (int i=0; i<N; i++){
+        if(i<N/2){
+            omega[i]=omegaLHS;
+        }else{
+            omega[i]=omegaRHS;
+        }
     }
 
     //opening up results file
@@ -26,9 +39,9 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
         
         if(excitation){ //add excitation at x_0
             if(i%2==0){ //condensate a
-                psi[i]+=0.001*exp(I*(k_0*x[i/2])-pow((x[i/2]-x_0)/width,2)/2); 
+                psi[i]+=0.001*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2); 
             }else{ //condensate b
-                psi[i]-=0.001*exp(I*(k_0*x[(i-1)/2])-pow((x[(i-1)/2]-x_0)/width,2)/2);
+                psi[i]-=0.001*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2);
             }
         }
 
@@ -43,7 +56,7 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
 }
 
 //solves eigenproblem (resulting from discretisation) using RK4 method to get psi(a0,b0,a1,b1,...,aN-1,bN-1) at +dt
-void GPsolver::RK4(dcomp psi[]){ //remember to multiply Mk's by I=-i
+void GPsolver::RK4(dcomp psi[],double omega[]){ //remember to multiply Mk's by I=-i
 
     //declaring variables for RK4
     dcomp k[N];
@@ -56,25 +69,25 @@ void GPsolver::RK4(dcomp psi[]){ //remember to multiply Mk's by I=-i
     for (int i=0; i<N; i++){
         k_1[i]=psi[i];
     }
-    spatialDiscretiser(k_1, Mk_1); //calculating Mk_1
+    spatialDiscretiser(k_1, Mk_1, omega); //calculating Mk_1
 
     //2nd RK4 iteration
     for (int i=0; i<N; i++){
         k_2[i]=psi[i]+dt*Mk_1[i]/2.;
     }
-    spatialDiscretiser(k_2, Mk_2); //calculating Mk_2
+    spatialDiscretiser(k_2, Mk_2, omega); //calculating Mk_2
 
     //3rd RK4 iteration
     for (int i=0; i<N; i++){
         k_3[i]=psi[i]+dt*Mk_2[i]/2.;
     }
-    spatialDiscretiser(k_3, Mk_3); //calculating Mk_3
+    spatialDiscretiser(k_3, Mk_3, omega); //calculating Mk_3
     
     //4th RK4 iteration
     for (int i=0; i<N; i++){
         k_4[i]=psi[i]+dt*Mk_3[i];
     }
-    spatialDiscretiser(k_4, Mk_4); //calculating Mk_4
+    spatialDiscretiser(k_4, Mk_4, omega); //calculating Mk_4
 
     //calculating new psi after dt time increment
     for (int i=0; i<N; i++){
@@ -83,34 +96,32 @@ void GPsolver::RK4(dcomp psi[]){ //remember to multiply Mk's by I=-i
 }
 
 //spatially discretises RHS of coupled GP eqn in 1D using FDM and calculates -iMk(a0,b0,a1,b1,...,aN-1,bN-1) 
-void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[]){
+void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[], double omega[]){
 
     dcomp C[N]; //constant introduced for convenience 
-    Const_calc(k, C); //calculates constant for each component at each gridpoint
+    Const_calc(k, C, omega); //calculates constant for each component at each gridpoint
 
     //calculating -iMk for each gridpoint, (N+i)%N to make grid loop 
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
             //Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+C[i]*k[i]+omega/g*n_0*k[i+1]-k[(N+i+2)%N]/pow(dx,2));
-            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+C[i]*k[i]+omega*k[i+1]-k[(N+i+2)%N]/pow(dx,2));
+            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+C[i]*k[i]+omega[i+1]*k[i+1]-k[(N+i+2)%N]/pow(dx,2));
         }else{ //odd entries for condensate b
-            //Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+omega/g*n_0*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]/pow(dx,2)); //omega needs to be complex conj
-            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+omega*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]/pow(dx,2));
+            //Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+omega/g*n_0*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]/pow(dx,2));
+            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+omega[i-1]*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]/pow(dx,2));
         }
     }
 }
 
 //Calculates convenient constant for spatial discretisation C(a0,b0,a1,b1,...,aN-1,bN-1)
-void GPsolver::Const_calc(dcomp k[], dcomp C[]){
+void GPsolver::Const_calc(dcomp k[], dcomp C[], double omega[]){
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);
-            //C[i]=2/pow(dx,2)+g_ab*(norm(k[i+1])-norm(k[i]))/(g*n_0)+abs(omega)/(g*n_0);
-            C[i]=2/pow(dx,2)+g_ab*(norm(k[i+1])-norm(k[i]))/(g*n_0)+abs(omega); 
+            //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0); with time dependance
+            C[i]=2/pow(dx,2)+g_ab*(norm(k[i+1])-norm(k[i]))/(g*n_0)+omega[i]; 
         }else{ //odd entries for condensate b
-            //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);
-            //C[i]=2/pow(dx,2)+g_ab*(norm(k[i-1])-norm(k[i]))/(g*n_0)+abs(omega)/(g*n_0);
-            C[i]=2/pow(dx,2)+g_ab*(norm(k[i-1])-norm(k[i]))/(g*n_0)+abs(omega);
+            //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0); with time dependance
+            C[i]=2/pow(dx,2)+g_ab*(norm(k[i-1])-norm(k[i]))/(g*n_0)+omega[i];
         }
     }
 }

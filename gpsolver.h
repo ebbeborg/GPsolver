@@ -15,7 +15,7 @@ class BEC_parameters {
         //discretisation parameters
         int gridsize=1000; //number of points/nodes on our condensate 1D grid
         int N=2*gridsize; //size of psi[N] (twice the gridsize to accomodate both components a&b)
-        double runtime=1000; //total time
+        double runtime=100; //total time
         double dt=0.001; //time stepsize
         //ground state homogenous symmetric condensate parameters (GS1)
         double L=250; //length of system
@@ -23,9 +23,9 @@ class BEC_parameters {
         double n_0=1/L; //total density of 2D condensate n_a=n_b=n_0/2
         double V_a=0, V_b=0; //external potential for homogenous system
         double g=1, g_ab=0.1; //interaction constants
-        double omega=0; //coherent coupling
+        double omegaLHS=0, omegaRHS=0.5;
         //excitation wavepacket parameters
-        double x_0=100; //initial position of packet
+        double x_0=50; //initial position of packet
         double k_0=1; //wavevector of packet 
         double width=10;//packet spatial width
 };
@@ -34,16 +34,16 @@ class BEC_parameters {
 class GPsolver: public BEC_parameters { 
         public:
             //generates initial psi
-            void Init_psi_generator(dcomp psi[], bool excitation, double x[]);
+            void Init_psi_generator(dcomp psi[], bool excitation, double x[], double omega[]);
 
             //solves eigenproblem (resulting from discretisation) using RK4 method to get psi(a0,b0,a1,b1,...,aN-1,bN-1) at +dt
-            void RK4(dcomp psi[]);
+            void RK4(dcomp psi[], double omega[]);
             
             //spatially discretises RHS of coupled GP eqn in 1D using FDM and calculates Mk(a0,b0,a1,b1,...,aN-1,bN-1)  
-            void spatialDiscretiser(dcomp k[], dcomp Mk[]);
+            void spatialDiscretiser(dcomp k[], dcomp Mk[], double omega[]);
                         
             //Calculates convenient constant for spatial discretisation C(a0,b0,a1,b1,...,aN-1,bN-1) 
-            void Const_calc(dcomp k[], dcomp C[]);
+            void Const_calc(dcomp k[], dcomp C[], double omega[]);
 };
 
 #endif
