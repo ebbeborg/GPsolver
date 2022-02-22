@@ -117,14 +117,23 @@ void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[], double omega[]){
 
 //Calculates convenient constant for RHS of discretised coupled GP eqns C(a0,b0,a1,b1,...,aN-1,bN-1)
 void GPsolver::Const_calc(dcomp k[], dcomp C[], double omega[]){
+    
+    double mu[N]; //chemical potential in units of gn
+    Chem_potential(mu, omega); //calculates mu
+
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0); with time dependance
-            C[i]=2/pow(dx,2)+norm(k[i])/n_0-0.5+g_ab*(norm(k[i+1])-n_0/2)/(g*n_0)+omega[i]; 
+            C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0)-mu[i];
         }else{ //odd entries for condensate b
-            //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0); with time dependance
-            C[i]=2/pow(dx,2)+norm(k[i])/n_0-0.5+g_ab*(norm(k[i-1])-n_0/2)/(g*n_0)+omega[i];
+            C[i]=2/pow(dx,2)+V_b/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0)-mu[i];
         }
+    }
+}
+
+//calculates dimensionless chemical potential mu
+void GPsolver::Chem_potential(double mu[], double omega[]){
+    for (int i=0; i<N; i++){
+        mu[i]=omega[i]+(1+g_ab/g)/2-abs(omega[i]);
     }
 }
 
