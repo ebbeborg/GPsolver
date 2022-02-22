@@ -41,9 +41,9 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
         
         if(excitation){ //add excitation at x_0
             if(i%2==0){ //condensate a
-                psi[i]+=0.0001*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2); 
+                psi[i]+=0.0002*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2); 
             }else{ //condensate b
-                psi[i]-=0.0001*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2);
+                psi[i]-=0.0002*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2);
             }
         }
 
@@ -115,7 +115,7 @@ void GPsolver::spatialDiscretiser(dcomp k[], dcomp Mk[], double omega[]){
     }
 }
 
-//Calculates convenient constant for spatial discretisation C(a0,b0,a1,b1,...,aN-1,bN-1)
+//Calculates convenient constant for RHS of discretised coupled GP eqns C(a0,b0,a1,b1,...,aN-1,bN-1)
 void GPsolver::Const_calc(dcomp k[], dcomp C[], double omega[]){
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
