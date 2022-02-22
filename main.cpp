@@ -16,7 +16,8 @@ int main(){
     double omega[parameter.N]; //coherent coupling    
 
     //generating initial condensate system at t=0, ie wavefunction psi, spatial grid x, coherent coupling omega
-    GPsolver.Init_psi_generator(psi, true, x, omega); //(orderparameter, excitation true/false, gridspace)
+    GPsolver.System_generator(x, omega);
+    GPsolver.Init_psi_generator(psi, true, x); //(orderparameter, excitation true/false, gridspace)
 
     //evaluating psi in time increments using RK4
     for(int t=1; t<1000*parameter.runtime; t++ ){
