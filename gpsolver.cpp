@@ -120,10 +120,10 @@ void GPsolver::Const_calc(dcomp k[], dcomp C[], double omega[]){
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
             //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0); with time dependance
-            C[i]=2/pow(dx,2)+norm(k[i])/n_0-1/2+g_ab*(norm(k[i+1])-norm(k[i]))/(g*n_0)+omega[i]; 
+            C[i]=2/pow(dx,2)+norm(k[i])/n_0-0.5+g_ab*(norm(k[i+1])-n_0/2)/(g*n_0)+omega[i]; 
         }else{ //odd entries for condensate b
             //C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0); with time dependance
-            C[i]=2/pow(dx,2)+norm(k[i])/n_0-1/2+g_ab*(norm(k[i-1])-norm(k[i]))/(g*n_0)+omega[i];
+            C[i]=2/pow(dx,2)+norm(k[i])/n_0-0.5+g_ab*(norm(k[i-1])-n_0/2)/(g*n_0)+omega[i];
         }
     }
 }
