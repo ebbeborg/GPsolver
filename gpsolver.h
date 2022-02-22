@@ -48,8 +48,8 @@ class GPsolver: public BEC_parameters {
             //Calculates convenient constant for RHS of discretised coupled GP eqns C(a0,b0,a1,b1,...,aN-1,bN-1) 
             void Const_calc(dcomp k[], dcomp C[], double omega[]);
 
-            //Calculates dimensionless chemical potential mu
-            void GPsolver::Chem_potential(double mu[], double omega[]);
+            //Calculates dimensionless chemical potential mu, to make GP eqns timeless
+            void Chem_potential(double mu[], double omega[]);
 };
 
 #endif

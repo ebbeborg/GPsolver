@@ -130,8 +130,9 @@ void GPsolver::Const_calc(dcomp k[], dcomp C[], double omega[]){
     }
 }
 
-//calculates dimensionless chemical potential mu
+//calculates dimensionless chemical potential mu, to make GP eqns timeless
 void GPsolver::Chem_potential(double mu[], double omega[]){
+    
     for (int i=0; i<N; i++){
         mu[i]=omega[i]+(1+g_ab/g)/2-abs(omega[i]);
     }
