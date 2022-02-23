@@ -31,7 +31,7 @@ int main(){
             
             for(int i=0; i<parameter.N; i++){
                 output<<norm(psi[i]); //saving results to "results.txt"
-                
+
                 if(i<parameter.N-1){
                     output<<",";
                 }
@@ -41,6 +41,5 @@ int main(){
             output.close();
         }
     }
-
     return 0;
 }

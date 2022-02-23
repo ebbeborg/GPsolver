@@ -42,9 +42,9 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
         
         if(excitation){ //add excitation at x_0
             if(i%2==0){ //condensate a
-                psi[i]+=0.0001*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2); 
+                psi[i]+=0.000001*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2); 
             }else{ //condensate b
-                psi[i]-=0.0001*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2);
+                psi[i]-=0.000001*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2);
             }
         }
 
