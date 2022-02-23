@@ -43,7 +43,7 @@ class GPsolver: public BEC_parameters {
             void RK4(dcomp psi[], double omega[]);
             
             //spatially discretises RHS of coupled GP eqn in 1D using FDM and calculates -iMk(a0,b0,a1,b1,...,aN-1,bN-1)  
-            void spatialDiscretiser(dcomp k[], dcomp Mk[], double omega[]);
+            void Spatial_discretiser(dcomp k[], dcomp Mk[], double omega[]);
                         
             //Calculates convenient constant for RHS of discretised coupled GP eqns C(a0,b0,a1,b1,...,aN-1,bN-1) 
             void Const_calc(dcomp k[], dcomp C[], double omega[]);
