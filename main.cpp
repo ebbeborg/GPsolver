@@ -30,7 +30,7 @@ int main(){
             output.open("results/results.txt", std::ios_base::app);
             
             for(int i=0; i<parameter.N; i++){
-                output<<real(psi[i]); //saving results to "results.txt"
+                output<<norm(psi[i]); //saving results to "results.txt"
                 if(i<parameter.N-1){
                     output<<",";
                 }

@@ -43,7 +43,7 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
             }
         }
 
-        output<<real(psi[i]); 
+        output<<norm(psi[i]); 
         if(i<N-1){
             output<<",";
         }
@@ -99,12 +99,12 @@ void GPsolver::Spatial_discretiser(dcomp k[], dcomp Mk[], double omega[]){
     dcomp C[N]; //constant introduced for convenience 
     Const_calc(k, C, omega); //calculates constant for each component at each gridpoint
 
-    //calculating -iMk for each gridpoint, (N+i)%N to make grid loop 
+    //calculating -iMk for each gridpoint (4th order scheme), (N+i)%N to make grid loop
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+C[i]*k[i]+omega[i+1]*k[i+1]-k[(N+i+2)%N]/pow(dx,2));
+            Mk[i]=-I*(((k[(N+i-4)%N]/4.)-(4.*k[(N+i-2)%N])-(4.*k[(N+i+2)%N])+(k[(N+i+4)%N]/4.))/(3.*pow(dx,2))+C[i]*k[i]+omega[i+1]*k[i+1]);
         }else{ //odd entries for condensate b
-            Mk[i]=-I*(-k[(N+i-2)%N]/pow(dx,2)+omega[i-1]*k[i-1]+C[i]*k[i]-k[(N+i+2)%N]/pow(dx,2));
+            Mk[i]=-I*(((k[(N+i-4)%N]/4.)-(4.*k[(N+i-2)%N])-(4.*k[(N+i+2)%N])+(k[(N+i+4)%N]/4.))/(3.*pow(dx,2))+C[i]*k[i]+omega[i-1]*k[i-1]);
         }
     }
 }
@@ -117,9 +117,9 @@ void GPsolver::Const_calc(dcomp k[], dcomp C[], double omega[]){
 
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);//-mu;
+            C[i]=5/(2*pow(dx,2))+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);//-mu;
         }else{ //odd entries for condensate b
-            C[i]=2/pow(dx,2)+V_b/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);//-mu;
+            C[i]=5/(2*pow(dx,2))+V_b/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);//-mu;
         }
     }
 }
