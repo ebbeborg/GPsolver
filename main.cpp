@@ -12,7 +12,7 @@ int main(){
 
     //declaring parameters
     dcomp psi[parameter.N]; //condensate wavefunction storing components a & b
-    double x[parameter.N]= {}; //spatial grid
+    double x[parameter.gridsize]= {}; //spatial grid
     double omega[parameter.N]; //coherent coupling    
 
     //generating initial condensate system at t=0, ie wavefunction psi, spatial grid x, coherent coupling omega
@@ -30,8 +30,7 @@ int main(){
             output.open("results/results.txt", std::ios_base::app);
             
             for(int i=0; i<parameter.N; i++){
-                output<<norm(psi[i]); //saving results to "results.txt"
-
+                output<<real(psi[i]); //saving results to "results.txt"
                 if(i<parameter.N-1){
                     output<<",";
                 }

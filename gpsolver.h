@@ -15,7 +15,7 @@ class BEC_parameters {
         //discretisation parameters
         int gridsize=800; //number of points/nodes on our condensate 1D grid
         int N=2*gridsize; //size of psi[N] (twice the gridsize to accomodate both components a&b)
-        double runtime=100; //total time
+        double runtime=20; //total time
         double dt=0.001; //time stepsize
         //ground state homogenous symmetric condensate parameters (GS1)
         double L=200; //length of system
@@ -27,7 +27,7 @@ class BEC_parameters {
         //excitation wavepacket parameters
         double x_0=100; //initial position of packet
         double k_0=1; //wavevector of packet 
-        double width=10;//packet spatial width
+        double width=5;//packet spatial width
 };
 
 //declaring functions

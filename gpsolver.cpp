@@ -8,15 +8,10 @@
 
 dcomp I=dcomp(0.,1.); //defining i
 
-
 void GPsolver::System_generator(double x[], double omega[]){
     //generating spatial grid 
     for (int i=1; i<N; i++){
-        if(i%2==0){
-            x[i]=x[i-1]+dx;
-        }else{
-            x[i]=x[i-1];
-        }
+        x[i]=x[i-1]+dx;
     }
 
     //generating coherent coupling for modulation of system
@@ -42,13 +37,13 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
         
         if(excitation){ //add excitation at x_0
             if(i%2==0){ //condensate a
-                psi[i]+=0.0000025*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2); 
+                psi[i]+=0.0005*exp(I*k_0*x[i/2]-pow((x[i/2]-x_0)/width,2)/2); 
             }else{ //condensate b
-                psi[i]-=0.0000025*exp(I*(k_0*x[i])-pow((x[i]-x_0)/width,2)/2);
+                psi[i]-=0.0005*exp(I*k_0*x[(i-1)/2]-pow((x[(i-1)/2]-x_0)/width,2)/2);
             }
         }
 
-        output<<norm(psi[i]); 
+        output<<real(psi[i]); 
         if(i<N-1){
             output<<",";
         }
@@ -122,9 +117,9 @@ void GPsolver::Const_calc(dcomp k[], dcomp C[], double omega[]){
 
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0)-mu;
+            C[i]=2/pow(dx,2)+V_a/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i+1])/(g*n_0);//-mu;
         }else{ //odd entries for condensate b
-            C[i]=2/pow(dx,2)+V_b/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0)-mu;
+            C[i]=2/pow(dx,2)+V_b/(g*n_0)+norm(k[i])/n_0+g_ab*norm(k[i-1])/(g*n_0);//-mu;
         }
     }
 }
