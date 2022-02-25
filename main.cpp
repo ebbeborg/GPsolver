@@ -12,7 +12,7 @@ int main(){
 
     //declaring parameters
     dcomp psi[parameter.N]; //condensate wavefunction storing components a & b
-    double x[parameter.gridsize]= {}; //spatial grid
+    double x[parameter.gridsize]= {}; //initialising spatial grid of zeros
     double omega[parameter.N]; //coherent coupling    
 
     //generating initial condensate system at t=0, ie wavefunction psi, spatial grid x, coherent coupling omega
@@ -20,7 +20,7 @@ int main(){
     GPsolver.Init_psi_generator(psi, true, x); //(orderparameter, excitation true/false, gridspace)
 
     //evaluating psi in time increments using RK4
-    int a=1/parameter.dt;
+    int a=1/parameter.dt; //time step normalisation factor
     for(int t=1; t<a*parameter.runtime; t++ ){
         
         GPsolver.RK4(psi, omega); //iterates psi by one time step dt
