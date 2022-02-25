@@ -13,10 +13,10 @@ typedef std::complex<double> dcomp; //defining complex data type
 class BEC_parameters {
     public:
         //discretisation parameters
-        int gridsize=800; //number of points/nodes on our condensate 1D grid
+        int gridsize=1600; //number of points/nodes on our condensate 1D grid
         int N=2*gridsize; //size of psi[N] (twice the gridsize to accomodate both components a&b)
         double runtime=20; //total time
-        double dt=0.001; //time stepsize
+        double dt=0.0005; //time stepsize
         //ground state homogenous symmetric condensate parameters (GS1)
         double L=200; //length of system
         double dx=L/gridsize; //grid spacing
@@ -28,6 +28,7 @@ class BEC_parameters {
         double x_0=100; //initial position of packet
         double k_0=1; //wavevector of packet 
         double width=5;//packet spatial width
+        double A=sqrt(n_0/2)/10; //packet peak amplitude (1/10th of steady state)
 };
 
 //declaring functions

@@ -20,11 +20,12 @@ int main(){
     GPsolver.Init_psi_generator(psi, true, x); //(orderparameter, excitation true/false, gridspace)
 
     //evaluating psi in time increments using RK4
-    for(int t=1; t<1000*parameter.runtime; t++ ){
+    int a=1/parameter.dt;
+    for(int t=1; t<a*parameter.runtime; t++ ){
         
         GPsolver.RK4(psi, omega); //iterates psi by one time step dt
         
-        if(t%1000==0){ //saving every 100th iteration
+        if(t%a==0){ //saving every 100th iteration
             
             std::ofstream output; //opening up results file
             output.open("results/results.txt", std::ios_base::app);
