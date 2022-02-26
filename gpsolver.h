@@ -13,10 +13,10 @@ typedef std::complex<double> dcomp; //defining complex data type
 class BEC_parameters {
     public:
         //discretisation parameters
-        int gridsize=1600; //number of points/nodes on our condensate 1D grid
+        int gridsize=800; //number of points/nodes on our condensate 1D grid
         int N=2*gridsize; //size of psi[N] (twice the gridsize to accomodate both components a&b)
         double runtime=20; //total time
-        double dt=0.0005; //time stepsize
+        double dt=0.001; //time stepsize
         //ground state homogenous symmetric condensate parameters (GS1)
         double L=200; //length of system
         double dx=L/gridsize; //grid spacing
@@ -43,7 +43,7 @@ class GPsolver: public BEC_parameters {
             //solves eigenproblem (resulting from discretisation) using RK4 method to get psi(a0,b0,a1,b1,...,aN-1,bN-1) at +dt
             void RK4(dcomp psi[], double omega[]);
             
-            //spatially discretises RHS of coupled GP eqn in 1D using FDM and calculates -iMk(a0,b0,a1,b1,...,aN-1,bN-1)  
+            //spatially discretises RHS of coupled GP eqn in 1D using FDM and calculates slope k=dpsi/dt=-iMpsi(a0,b0,a1,b1,...,aN-1,bN-1) 
             void Spatial_discretiser(dcomp k[], dcomp Mk[], double omega[]);
                         
             //Calculates convenient constant for RHS of discretised coupled GP eqns C(a0,b0,a1,b1,...,aN-1,bN-1) 
