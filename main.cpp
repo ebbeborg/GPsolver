@@ -1,5 +1,4 @@
 //GPE is dimensionless and removed e^-imut/hbar time dependance
-
 #include <iostream>
 #include <fstream>
 #include "gpsolver.h"
@@ -16,14 +15,14 @@ int main(){
     double omega[parameter.N]; //coherent coupling    
 
     //generating initial condensate system at t=0, ie wavefunction psi, spatial grid x, coherent coupling omega
-    GPsolver.System_generator(x, omega);
+    GPsolver.System_generator(x);
     GPsolver.Init_psi_generator(psi, true, x); //(orderparameter, excitation true/false, gridspace)
 
     //evaluating psi in time increments using RK4
     int a=1/parameter.dt; //time step normalisation factor
     for(int t=1; t<a*parameter.runtime; t++ ){
         
-        GPsolver.RK4(psi, omega); //iterates psi by one time step dt
+        GPsolver.RK4(psi); //iterates psi by one time step dt
         
         if(t%a==0){ //saving every 100th iteration
             
