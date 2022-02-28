@@ -1,8 +1,5 @@
 //Source code for the GPsolver class functions which discretise and solve the 2-component coupled GP eqns in time
 #include "gpsolver.h"
-#include <stdlib.h>
-#include <cmath>
-#include <iostream>
 #include <fstream>
 
 dcomp I=dcomp(0.,1.); //defining complex i=sqrt(-1)
