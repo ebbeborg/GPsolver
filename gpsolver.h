@@ -26,10 +26,10 @@ class BEC_parameters {
         double omega=0; //LHS=0, omegaRHS=0; //coherent coupling on both sides of discontinuity
         //excitation wavepacket parameters
         double x_0=100; //initial position of packet
-        double k_0=0.5; //wavevector of packet 
+        double k_0=1.5; //wavevector of packet 
         double width=5;//packet spatial width
-        double A=sqrt(n_0/2)/10; //packet peak amplitude (1/10th of steady state)
-        double u=1.291, v=-0.816; //amplitude of positive and negative bogoliubov exctitation modes
+        //double A=sqrt(n_0/2)/10; //packet peak amplitude (1/10th of steady state)
+        double u=1.0023, v=-0.0677; //amplitude of positive and negative bogoliubov exctitation modes
 };
 
 //declaring functions
