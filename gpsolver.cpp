@@ -38,10 +38,10 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
         if(excitation){ //add excitation at x_0
             if(i%2==0){ //condensate a
                 //psi[i]=psi[i]+A*exp(I*k_0*x[i/2]-pow((x[i/2]-x_0)/width,2)/2);
-                psi[i]=psi[i]*(1.+exp(-pow((x[i/2]-x_0)/width,2)/2)*(u*exp(I*k_0*x[i/2])+v*exp(-I*k_0*x[i/2]))); 
+                psi[i]=psi[i]*(1.+A*exp(-pow((x[i/2]-x_0)/width,2)/2)*(u*exp(I*k_0*x[i/2])+v*exp(-I*k_0*x[i/2]))); 
             }else{ //condensate b
                 //psi[i]=psi[i]-A*exp(I*k_0*x[(i-1)/2]-pow((x[(i-1)/2]-x_0)/width,2)/2);
-                psi[i]=psi[i]*(1.-exp(-pow((x[(i-1)/2]-x_0)/width,2)/2)*(u*exp(I*k_0*x[(i-1)/2])+v*exp(-I*k_0*x[(i-1)/2]))); 
+                psi[i]=psi[i]*(1.-A*exp(-pow((x[(i-1)/2]-x_0)/width,2)/2)*(u*exp(I*k_0*x[(i-1)/2])+v*exp(-I*k_0*x[(i-1)/2]))); 
             }
         }
 
