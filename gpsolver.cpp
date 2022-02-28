@@ -1,31 +1,42 @@
-//Source code for the FDM and Runge functions which discretise the 2-component coupled GP eqns 
-
+//Source code for the GPsolver class functions which discretise and solve the 2-component coupled GP eqns in time
 #include "gpsolver.h"
 #include <stdlib.h>
 #include <cmath>
 #include <iostream>
 #include <fstream>
 
-dcomp I=dcomp(0.,1.); //defining i
+dcomp I=dcomp(0.,1.); //defining complex i=sqrt(-1)
 
-void GPsolver::System_generator(double x[]){
+void GPsolver::Gridspace(double x[]){
     //generating spatial grid 
-    for (int i=1; i<N; i++){
+    for (int i=1; i<gridsize; i++){
         x[i]=x[i-1]+dx;
     }
+}
 
-    //generating coherent coupling for modulation of system
-    //for (int i=0; i<N; i++){
-    //    if(i<N/2){
-    //        omega[i]=omegaLHS;
-    //    }else{
-    //        omega[i]=omegaRHS;
-    //    }
-    //}
+//generating coherent coupling for modulation of system
+void GPsolver::Modulator(double omega[]){
+    for (int i=0; i<N; i++){
+        if(i<N/2){
+            omega[i]=omegaLHS;
+        }else{
+            omega[i]=omegaRHS;
+        }
+    }
+}
+
+//calculates Bogoliubov positive (u) and negative (v) mode amplitudes for given k_0
+void GPsolver::Bogoliubov_mode_amplitudes(double &u, double &v){
+    u=1.00007;
+    v=-0.01219;
 }
 
 //generates initial psi and excitation
 void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
+
+    //calculating bogoliubov excitation mode amplitudes u and v using initial wavevector k_0
+    double u, v;
+    Bogoliubov_mode_amplitudes(u, v);
 
     //opening up results file
     std::ofstream output;
@@ -37,10 +48,8 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
         
         if(excitation){ //add excitation at x_0
             if(i%2==0){ //condensate a
-                //psi[i]=psi[i]+A*exp(I*k_0*x[i/2]-pow((x[i/2]-x_0)/width,2)/2);
                 psi[i]=psi[i]*(1.+A*exp(-pow((x[i/2]-x_0)/width,2)/2)*(u*exp(I*k_0*x[i/2])+v*exp(-I*k_0*x[i/2]))); 
             }else{ //condensate b
-                //psi[i]=psi[i]-A*exp(I*k_0*x[(i-1)/2]-pow((x[(i-1)/2]-x_0)/width,2)/2);
                 psi[i]=psi[i]*(1.-A*exp(-pow((x[(i-1)/2]-x_0)/width,2)/2)*(u*exp(I*k_0*x[(i-1)/2])+v*exp(-I*k_0*x[(i-1)/2]))); 
             }
         }
@@ -56,7 +65,7 @@ void GPsolver::Init_psi_generator(dcomp psi[], bool excitation, double x[]){
 }
 
 //solves eigenproblem (resulting from discretisation) using RK4 method to get psi(a0,b0,a1,b1,...,aN-1,bN-1) at +dt
-void GPsolver::RK4(dcomp psi[]){ 
+void GPsolver::RK4(dcomp psi[], double omega[]){ 
 
     //declaring variables for RK4
     dcomp psi_temp[N];
@@ -67,25 +76,25 @@ void GPsolver::RK4(dcomp psi[]){
     dcomp k_4[N];
 
     //1st iteration, calculating slope k_1 at initial psi(t0)
-    Spatial_discretiser(psi, k_1);
+    Spatial_discretiser(psi, k_1, omega);
     
     //2nd iteration, calculating slope k_2 at 1st psi_temp increment
     for (int i=0; i<N; i++){
         psi_temp[i]=psi[i]+dt*k_1[i]/2.;
     }
-    Spatial_discretiser(psi_temp, k_2);
+    Spatial_discretiser(psi_temp, k_2, omega);
     
     //3rd iteration, calculating slope k_3 at 2nd psi_temp increment
     for (int i=0; i<N; i++){
         psi_temp[i]=psi[i]+dt*k_2[i]/2.;
     }
-    Spatial_discretiser(psi_temp, k_3);
+    Spatial_discretiser(psi_temp, k_3, omega);
     
     //4th iteration, calculating slope k_4 at 3rd psi_temp increment
     for (int i=0; i<N; i++){
         psi_temp[i]=psi[i]+dt*k_3[i];
     }
-    Spatial_discretiser(psi_temp, k_4);
+    Spatial_discretiser(psi_temp, k_4, omega);
     
     //calculating new psi after dt time increment
     for (int i=0; i<N; i++){
@@ -94,17 +103,17 @@ void GPsolver::RK4(dcomp psi[]){
 }
 
 //spatially discretises RHS of coupled GP eqn in 1D using FDM and calculates slope k=dpsi/dt=-iMpsi(a0,b0,a1,b1,...,aN-1,bN-1) 
-void GPsolver::Spatial_discretiser(dcomp psi_temp[], dcomp k[]){
+void GPsolver::Spatial_discretiser(dcomp psi_temp[], dcomp k[], double omega[]){
 
     dcomp C[N]; //constant introduced for convenience 
     Const_calc(psi_temp, C); //calculates constant for each component at each gridpoint
 
-    //calculating -iMk for each gridpoint (4th order scheme), (N+i)%N to make grid loop
+    //calculating -idpsi/dt for each gridpoint (4th order scheme), (N+i)%N to make grid loop
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
-            k[i]=-I*(((psi_temp[(N+i-4)%N]/4.)-(4.*psi_temp[(N+i-2)%N])-(4.*psi_temp[(N+i+2)%N])+(psi_temp[(N+i+4)%N]/4.))/(3.*pow(dx,2))+C[i]*psi_temp[i]+omega*psi_temp[i+1]);
+            k[i]=-I*(((psi_temp[(N+i-4)%N]/4.)-(4.*psi_temp[(N+i-2)%N])-(4.*psi_temp[(N+i+2)%N])+(psi_temp[(N+i+4)%N]/4.))/(3.*pow(dx,2))+C[i]*psi_temp[i]+omega[i+1]*psi_temp[i+1]);
         }else{ //odd entries for condensate b
-            k[i]=-I*(((psi_temp[(N+i-4)%N]/4.)-(4.*psi_temp[(N+i-2)%N])-(4.*psi_temp[(N+i+2)%N])+(psi_temp[(N+i+4)%N]/4.))/(3.*pow(dx,2))+C[i]*psi_temp[i]+omega*psi_temp[i-1]);
+            k[i]=-I*(((psi_temp[(N+i-4)%N]/4.)-(4.*psi_temp[(N+i-2)%N])-(4.*psi_temp[(N+i+2)%N])+(psi_temp[(N+i+4)%N]/4.))/(3.*pow(dx,2))+C[i]*psi_temp[i]+omega[i-1]*psi_temp[i-1]);
         }
     }
 }

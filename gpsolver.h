@@ -1,8 +1,4 @@
-//Header file for FDM and Runge functions
-
-//Spatially discretises the RHS of coupled GP eqns (for 2-component homogenous BEC) in 1D using finite differential method
-//Returns RHS of coupled GP eqns in the form of a matrix M and coloumn vector x (the discretised order parameter) 
-
+//Header file for GPsolver class functions and BEC parameters
 #ifndef GPSOLVER_H
 #define GPSOLVER_H
 
@@ -23,29 +19,35 @@ class BEC_parameters {
         double n_0=1/L; //total density of 2D condensate n_a=n_b=n_0/2
         double V_a=0, V_b=0; //external potential for homogenous system
         double g=1, g_ab=0.8; //interaction constants
-        double omega=0; //LHS=0, omegaRHS=0; //coherent coupling on both sides of discontinuity
+        double omegaLHS=0, omegaRHS=0; //coherent coupling on both sides of discontinuity
         //excitation wavepacket parameters
         double x_0=100; //initial position of packet
-        double k_0=2; //wavevector of packet 
-        double width=5;//packet spatial width
-        double A=sqrt(n_0/2)/100; //packet peak amplitude (1/10th of steady state)
-        double u=1.0007, v=-0.0386; //amplitude of positive and negative bogoliubov exctitation modes
+        //double k_fundamental=2*M_PI/L; //fundamental wavevector of system
+        double k_0=2;//80*k_fundamental; //wavevector of packet in terms of fundamental wavevector
+        double width=5; //packet spatial width
+        double A=0.01; //packet peak amplitude (1/100th of steady state)
 };
 
 //declaring functions
 class GPsolver: public BEC_parameters { 
         public:
-            //generates spatial grid and coherent coupling distribution
-            void System_generator(double x[]);
+            //generates spatial grid and modulation of coherent coupling 
+            void Gridspace(double x[]);
+
+            //generating coherent coupling for modulation of system
+            void Modulator(double omega[]);
+
+            //calculates Bogoliubov positive (u) and negative (v) mode amplitudes for given k_0
+            void Bogoliubov_mode_amplitudes(double &u, double &v);
 
             //generates initial psi
             void Init_psi_generator(dcomp psi[], bool excitation, double x[]);
 
             //solves eigenproblem (resulting from discretisation) using RK4 method to get psi(a0,b0,a1,b1,...,aN-1,bN-1) at +dt
-            void RK4(dcomp psi[]);
+            void RK4(dcomp psi[], double omega[]);
             
             //spatially discretises RHS of coupled GP eqn in 1D using FDM and calculates slope k=dpsi/dt=-iMpsi(a0,b0,a1,b1,...,aN-1,bN-1) 
-            void Spatial_discretiser(dcomp k[], dcomp Mk[]);
+            void Spatial_discretiser(dcomp psi_temp[], dcomp k[], double omega[]);
                         
             //Calculates convenient constant for RHS of discretised coupled GP eqns C(a0,b0,a1,b1,...,aN-1,bN-1) 
             void Const_calc(dcomp k[], dcomp C[]);

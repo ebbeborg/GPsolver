@@ -1,4 +1,5 @@
-//GPE is dimensionless and removed e^-imut/hbar time dependance
+//Spatially discretises the RHS of coupled GP eqns (for 2-component homogenous BEC) in 1D using finite differential method
+//Returns RHS of coupled GP eqns in the form of a matrix M and coloumn vector x (the discretised order parameter) 
 #include <iostream>
 #include <fstream>
 #include "gpsolver.h"
@@ -6,23 +7,28 @@
 int main(){
 
     //declaring objects
-    BEC_parameters parameter; //declaring object to store BEC parameters
-    GPsolver GPsolver; //declaring object that allows access to GPsolver functions
+    BEC_parameters parameter; //stores BEC parameters
+    GPsolver GPsolver; //allows access to GPsolver functions
 
     //declaring parameters
-    dcomp psi[parameter.N]; //condensate wavefunction storing components a & b
-    double x[parameter.gridsize]= {}; //initialising spatial grid of zeros
-    double omega[parameter.N]; //coherent coupling    
+    double x[parameter.gridsize]={}; //initialising spatial grid of zeros
+    dcomp psi[parameter.N]; //condensate wavefunction psi(a0, b0, a1, b1, etc.)
+    double omega[parameter.N]; //coherent coupling
 
-    //generating initial condensate system at t=0, ie wavefunction psi, spatial grid x, coherent coupling omega
-    GPsolver.System_generator(x);
-    GPsolver.Init_psi_generator(psi, true, x); //(orderparameter, excitation true/false, gridspace)
+    //generating gridspace
+    GPsolver.Gridspace(x);
+    
+    //generating initial condensate wavefunction of system (true/false to add/remove excitation)
+    GPsolver.Init_psi_generator(psi, true, x); 
+
+    //generating spatial distribution of coherent coupling that will modulate system
+    GPsolver.Modulator(omega);
 
     //evaluating psi in time increments using RK4
     int a=1/parameter.dt; //time step normalisation factor
     for(int t=1; t<a*parameter.runtime; t++ ){
         
-        GPsolver.RK4(psi); //iterates psi by one time step dt
+        GPsolver.RK4(psi, omega); //iterates psi by one time step dt
         
         if(t%a==0){ //saving every 100th iteration
             
