@@ -24,8 +24,8 @@ void GPsolver::Modulator(double omega[]){
 
 //calculates Bogoliubov positive (u) and negative (v) mode amplitudes for given k_0
 void GPsolver::Bogoliubov_mode_amplitudes(double &u, double &v){
-    u=1.00007;
-    v=-0.01219;
+    u=1.001;
+    v=-0.04559;
 }
 
 //generates initial psi and excitation
