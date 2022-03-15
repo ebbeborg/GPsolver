@@ -117,9 +117,6 @@ void GPsolver::Spatial_discretiser(dcomp psi_temp[], dcomp k[], double omega[]){
 
 //Calculates convenient constant for RHS of discretised coupled GP eqns C(a0,b0,a1,b1,...,aN-1,bN-1)
 void GPsolver::Const_calc(dcomp psi_temp[], dcomp C[]){
-    
-    double mu; //chemical potential in units of gn
-    Chem_potential(mu); //calculates mu
 
     for (int i=0; i<N; i++){
         if (i%2==0){ //even entries are for condensate a
@@ -128,12 +125,6 @@ void GPsolver::Const_calc(dcomp psi_temp[], dcomp C[]){
             C[i]=5/(2*pow(dx,2))+norm(psi_temp[i])/n_0+g_ab*norm(psi_temp[i-1])/(g*n_0)-mu;
         }
     }
-}
-
-//calculates dimensionless chemical potential mu, to make GP eqns timeless
-void GPsolver::Chem_potential(double mu){
-    
-    mu=(1+g_ab/g)/2;
 }
 
 

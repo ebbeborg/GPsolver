@@ -11,7 +11,7 @@ class BEC_parameters {
         //discretisation parameters
         int gridsize=1600; //number of points/nodes on our condensate 1D grid
         int N=2*gridsize; //size of psi[N] (twice the gridsize to accomodate both components a&b)
-        double runtime=60; //total time
+        double runtime=80; //total time
         double dt=0.001; //time stepsize
         //ground state homogenous symmetric condensate parameters (GS1)
         double L=400; //length of system
@@ -19,9 +19,10 @@ class BEC_parameters {
         double n_0=1/L; //total density of 2D condensate n_a=n_b=n_0/2
         double V_a=0, V_b=0; //external potential for homogenous system
         double g=1, g_ab=0.8; //interaction constants
-        double omegaLHS=0, omegaRHS=0; //coherent coupling on both sides of discontinuity
+        double omegaLHS=0, omegaRHS=-0.6; //coherent coupling on both sides of discontinuity
+        double mu=(1+g_ab/g)/2; //chemical potential mu, to make GP eqns timeless, constant to cancel spatial variation of omega
         //excitation wavepacket parameters
-        double x_0=175; //initial position of packet
+        double x_0=160; //initial position of packet
         //double k_fundamental=2*M_PI/L; //fundamental wavevector of system
         double k_0=1;//80*k_fundamental; //wavevector of packet in terms of fundamental wavevector
         double width=10; //packet spatial width
@@ -51,9 +52,6 @@ class GPsolver: public BEC_parameters {
                         
             //Calculates convenient constant for RHS of discretised coupled GP eqns C(a0,b0,a1,b1,...,aN-1,bN-1) 
             void Const_calc(dcomp k[], dcomp C[]);
-
-            //Calculates dimensionless chemical potential mu, to make GP eqns timeless
-            void Chem_potential(double mu);
 };
 
 #endif
